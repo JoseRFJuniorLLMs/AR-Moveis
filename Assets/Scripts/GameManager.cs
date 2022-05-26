@@ -12,7 +12,14 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
-    private void Awake(GameObject instance)
+    // Start is called before the first frame update
+    void Start()
+    {
+        MainMenu();
+        
+    }
+
+    private void Awake()
     {
         if (instance != null && instance != this)
         {
@@ -20,28 +27,18 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _ = this;
+            //Destroy(gameObject);
+            instance = this;
         }
 
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        MainMenu();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void MainMenu()
     {
         OnMainMenu?.Invoke();
         Debug.Log("Main Menu Activated");
 
     }
-
 
     public void ItemsMenu()
     {
@@ -55,6 +52,11 @@ public class GameManager : MonoBehaviour
         OnARPosition?.Invoke();
         Debug.Log("Items Menu Activated");
 
+    }
+
+    public void CloseApp()
+    {
+        Application.Quit(); 
     }
 
 }
