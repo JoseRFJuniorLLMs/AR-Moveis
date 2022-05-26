@@ -6,7 +6,7 @@ using System;
 public class GameManager : MonoBehaviour
 {
     public event Action OnMainMenu;
-    public event Action OnItemsMeunu;
+    public event Action OnItemsMenu;
     public event Action OnARPosition;
 
 
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
     public void ItemsMenu()
     {
-        OnItemsMeunu?.Invoke();
+        OnItemsMenu?.Invoke();
         Debug.Log("Items Menu Activated");
 
     }

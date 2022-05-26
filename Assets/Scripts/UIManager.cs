@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     {
         
         GameManager.instance.OnMainMenu += ActivateMainMenu;
-        GameManager.instance.OnItemsMeunu += ActivateItemsMenu;
+        GameManager.instance.OnItemsMenu += ActivateItemsMenu;
         GameManager.instance.OnARPosition += ActivateARPosition;
 
     }
