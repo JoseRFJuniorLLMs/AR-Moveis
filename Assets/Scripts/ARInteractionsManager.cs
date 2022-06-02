@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-
+    
 public class ARInteractionsManager : MonoBehaviour
 {
 
@@ -21,16 +21,18 @@ public class ARInteractionsManager : MonoBehaviour
     private bool isOver3DModel;
     private Vector2 initialTouchPos;
 
-public GameObject Item3DModel
-{
-    set
+    // Seta as caracteristicas dos modelos 3D
+    public GameObject Item3DModel
     {
+      set
+      {
         item3DModel = value;
         item3DModel.transform.position = aRPointer.transform.position;
         item3DModel.transform.parent = aRPointer.transform;
         isInitialPosition = true;
+      }
     }
-}
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +58,7 @@ public GameObject Item3DModel
             }
         }
 
+        //Se um dedo esta na tela tocando o objeto
         if (Input.touchCount > 0)
         {
             Touch touchOne = Input.GetTouch(0);
@@ -69,20 +72,23 @@ public GameObject Item3DModel
 
             if (touchOne.phase == TouchPhase.Moved)
             {
-
+                Debug.Log("touchOne: Antes do SE ");
                 if (aRRaycastManager.Raycast(touchOne.position, hits, TrackableType.Planes))
-
+                    Debug.Log("Raycast: Depois do SE ");
                 {
                     Pose hitPose = hits[0].pose;
+                    Debug.Log("hitPose: hits 0 ");
                     if (!isOverUI && isOver3DModel)
                     {
+                        Debug.Log("isOverUI isOver3DModel: transform.position");
                         transform.position = hitPose.position;
                     }
                 }
             }
-
-            if (Input.touchCount == 2)
-            {
+        
+        //Se os dois dedos estao na tela tocando o objeto
+        if (Input.touchCount == 2)
+        {
                 Touch touchTwo = Input.GetTouch(1);
 
                 if (touchOne.phase == TouchPhase.Began || touchTwo.phase == TouchPhase.Began)
@@ -97,20 +103,20 @@ public GameObject Item3DModel
                     item3DModel.transform.rotation = Quaternion.Euler(0, item3DModel.transform.eulerAngles.y - angle, 0);
                     initialTouchPos = currentTouchPos;
                 }
-            }
-            if (isOver3DModel && item3DModel == null && !isOverUI)
-            {
+        }
+
+        //
+        if (isOver3DModel && item3DModel == null && !isOverUI)
+        {
                 GameManager.instance.ARPosition();
                 item3DModel = itemSelected;
                 itemSelected = null;
                 aRPointer.SetActive(true);
                 transform.position = item3DModel.transform.position;
                 item3DModel.transform.parent = aRPointer.transform;
-
-            }
+        }
         }
     }
-    
     //Funcao para saber se o objeto 3D foi tocado
     private bool isTapOver3DModel(Vector2 touchPosition)
     {
@@ -127,7 +133,7 @@ public GameObject Item3DModel
         return false;
     }
 
-    //Funcao referente a UI
+    //Funcao referente a UI.
     private bool isTapOverUI(Vector2 touchPosition)
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
@@ -138,6 +144,8 @@ public GameObject Item3DModel
 
         return result.Count > 0;
     }
+
+    //Seta a posicao do item.
     private void SetItemPosition()
     {
         if (item3DModel != null)
@@ -146,5 +154,13 @@ public GameObject Item3DModel
             aRPointer.SetActive(false);
             item3DModel = null;
         }
+    }
+
+    //Apaga os Item da tela
+    public void DeleteItem()
+    {
+        Destroy(item3DModel);
+        aRPointer.SetActive(false);
+        GameManager.instance.MainMenu();
     }
 }
